@@ -1,5 +1,6 @@
 <div layout="column" align="end">
 <div layout="column" layout-align="space-around center">
+<!--RightSidenavigation -->
 <md-sidenav md-component-id="right" md-is-open="isSidenavOpen" class="md-sidenav-right">
 <md-toolbar class="md-tall md-hue-2">
             <div layout="column" layout-align="center center"  class="md-toolbar-tools-bottom inset">
@@ -32,11 +33,73 @@
     </md-select>
  </div>
 
+ <div layout="row" layout="center">
+<div class="inset" layout="center" class="md-padding" ng-cloak>
+    <ng-md-icon icon="description"></ng-md-icon>
+</div>
+<md-select id="mg-courseSelector" ng-change="onCourseSelectValueChange(ddlvalue1)"  data-ng-model="ddlvalue1"  placeholder="Select Board"
+                   md-on-close="clearSearchTerm()" md-on-open="loadBoards()"
+                   data-md-container-class="selectdemoSelectHeader"
+                   multiple flex style="text-align: center;">
+          <md-select-header class="demo-select-header">
+            <input ng-model="searchTerm"
+                   type="search"
+                   placeholder="Search for a Boards"
+                   class="demo-header-searchbox _md-text" layout="center center">
+          </md-select-header>
+          <md-optgroup label="boards">
+            <md-option ng-value="board" ng-repeat="board in boards">{{board.name}}</md-option>
+          </md-optgroup>
+    </md-select>
+ </div>
+
+
+
+ <div layout="row" layout="center">
+<div class="inset" layout="center" class="md-padding" ng-cloak>
+    <ng-md-icon icon="description"></ng-md-icon>
+</div>
+<md-select id="mg-courseSelector" ng-change="onCourseSelectValueChange(ddlvalue2)"  data-ng-model="ddlvalue2"  placeholder="Select Grade"
+                   md-on-close="clearSearchTerm()" md-on-open="loadGrades()"
+                   data-md-container-class="selectdemoSelectHeader"
+                   multiple flex style="text-align: center;">
+          <md-select-header class="demo-select-header">
+            <input ng-model="searchTerm"
+                   type="search"
+                   placeholder="Search for a Grade"
+                   class="demo-header-searchbox _md-text" layout="center center">
+          </md-select-header>
+          <md-optgroup label="grades">
+            <md-option ng-value="grade" ng-repeat="grade in grades">{{grade.name}}</md-option>
+          </md-optgroup>
+    </md-select>
+ </div>
+
+ <div layout="row" layout="center">
+<div class="inset" layout="center" class="md-padding" ng-cloak>
+    <ng-md-icon icon="description"></ng-md-icon>
+</div>
+<md-select id="mg-courseSelector" ng-change="onCourseSelectValueChange(ddlvalue3)"  data-ng-model="ddlvalue3"  placeholder="Select Subject"
+                   md-on-close="clearSearchTerm()" md-on-open="loadSubjects()"
+                   data-md-container-class="selectdemoSelectHeader"
+                   multiple flex style="text-align: center;">
+          <md-select-header class="demo-select-header">
+            <input ng-model="searchTerm"
+                   type="search"
+                   placeholder="Search for a Boards"
+                   class="demo-header-searchbox _md-text" layout="center center">
+          </md-select-header>
+          <md-optgroup label="subjects">
+            <md-option ng-value="subject" ng-repeat="subject in subjects">{{subject.name}}</md-option>
+          </md-optgroup>
+    </md-select>
+ </div>
+
  <div layout="row" layout="center center">
                 <div class="inset" layout="center">
                     <ng-md-icon icon="people"></ng-md-icon>
                 </div>
-            <md-select  ng-change="onUserSelectValueChange(ddlvalue1)"  data-ng-model="ddlvalue1" placeholder="Select users"
+            <md-select  ng-change="onUserSelectValueChange(ddlvalue4)"  data-ng-model="ddlvalue4" placeholder="Select users"
                    md-on-close="clearSearchTerm()" md-on-open="loadUsers()"
                    data-md-container-class="selectdemoSelectHeader"
                    multiple flex style="text-align: center;">

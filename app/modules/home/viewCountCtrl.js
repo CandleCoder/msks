@@ -20,6 +20,15 @@ angular.module("home", ['ngMaterial', 'ngMessages']).controller("ViewCountCtrl",
   $scope.course = null;
   $scope.courses = null;
 
+  $scope.board = null;
+  $scope.boards = null;
+
+  $scope.grade = null;
+  $scope.grades = null;
+
+  $scope.subject = null;
+  $scope.subjects = null;
+
   $scope.loadUsers = function(){
    $scope.users = $scope.users ||[
        { id: 1, name: 'Amit' },
@@ -50,6 +59,37 @@ $scope.loadCourses = function(){
     { id: 2, name: 'Work' },
     { id: 3, name: 'Plant' },
   ]
+}
+
+$scope.loadSubjects = function(){
+  $scope.subjects = $scope.subjects || [
+    { id: 1, name: 'Economics' },
+    { id: 2, name: 'Science' },
+    
+  ]
+}
+
+$scope.loadBoards = function(){
+  $scope.boards = $scope.boards || [
+    { id: 1, name: 'CBSE' },
+    { id: 2, name: 'ICSE' },
+  ]
+}
+
+$scope.loadGrades = function(){
+   $scope.grades = $scope.grades ||[
+       { id: 1, name: '1' },
+       { id: 2, name: '2' },
+       { id: 3, name: '3' },
+       { id: 4, name: '4' },
+       { id: 5, name: '5' },
+       { id: 6, name: '6' },
+       { id: 7, name: '7' },
+       { id: 8, name: '8' },
+       { id: 9, name: '9' },
+       { id: 10, name: '10' },
+
+   ];
 }
 
   //API Variables
@@ -367,50 +407,50 @@ $scope.loadCourses = function(){
       });
       $scope.DashboardName="Dashboard";
       $scope.ViewCountName = "View Count";
-      $scope.TimeSpentName = "Time Spent"
+      $scope.TimeSpentName = "Last Visited"
 
 
-      $http.get("http://10.11.9.8/api/v1/analytics/viewcount?action=attempted&type=course")
-      .then(function(response) {
+     //  $http.get("http://10.11.9.8/api/v1/analytics/viewcount?action=attempted&type=course")
+     //  .then(function(response) {
 
-        // store response data in a variable
-        responsejson = response.data;
+     //    // store response data in a variable
+     //    responsejson = response.data;
 
-        for( i = 0; i < responsejson.ResultData.length ; i++){
-          delete responsejson.ResultData[i].CourseId;
-          graphInnerArr.push({v: responsejson.ResultData[i].CourseName});
-          graphInnerArr.push({v: responsejson.ResultData[i].Total_times_attempted});
+     //    for( i = 0; i < responsejson.ResultData.length ; i++){
+     //      delete responsejson.ResultData[i].CourseId;
+     //      graphInnerArr.push({v: responsejson.ResultData[i].CourseName});
+     //      graphInnerArr.push({v: responsejson.ResultData[i].Total_times_attempted});
 
-          graphMainArr.push({c: graphInnerArr});
-          graphInnerArr=[];
-        }
-
-
-
-        $scope.chartObject = {};
-        $scope.chartObject.type = "ColumnChart";
-
-        $scope.chartObject.data = {"cols": [
-          {id: "t", label: "Course Name", type: "string"},
-          {id: "s", label: "View Count", type: "number"}
-        ], "rows": graphMainArr
-      };
+     //      graphMainArr.push({c: graphInnerArr});
+     //      graphInnerArr=[];
+     //    }
 
 
-      $scope.chartObject.options = {
-        'title': 'Graph',
-        'vAxis': {
-          'title': 'View Count',
-          logScale:true,
-          'gridlines': {
-            'count': 10
-          }
-        },
-        'hAxis': {
-          'title': 'Courses',
 
-        }
-      };
+     //    $scope.chartObject = {};
+     //    $scope.chartObject.type = "ColumnChart";
 
-     });
+     //    $scope.chartObject.data = {"cols": [
+     //      {id: "t", label: "Course Name", type: "string"},
+     //      {id: "s", label: "View Count", type: "number"}
+     //    ], "rows": graphMainArr
+     //  };
+
+
+     //  $scope.chartObject.options = {
+     //    'title': 'Graph',
+     //    'vAxis': {
+     //      'title': 'View Count',
+     //      logScale:true,
+     //      'gridlines': {
+     //        'count': 10
+     //      }
+     //    },
+     //    'hAxis': {
+     //      'title': 'Courses',
+
+     //    }
+     //  };
+
+     // });
   });

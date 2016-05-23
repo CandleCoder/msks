@@ -14,9 +14,46 @@ angular.module("home", ['ngMaterial', 'ngMessages']).controller("ViewCountCtrl",
 
   var tempSelectedCourse = [];
   var tempSelectedUser = [];
+  $scope.user = null;
+  $scope.users = null;
+
+  $scope.course = null;
+  $scope.courses = null;
+
+  $scope.loadUsers = function(){
+   $scope.users = $scope.users ||[
+       { id: 1, name: 'Amit' },
+       { id: 2, name: 'Ankit' },
+       { id: 3, name: 'Akash' },
+       { id: 4, name: 'Chitra' },
+       { id: 5, name: 'Charu' },
+       { id: 6, name: 'Deepti' },
+       { id: 7, name: 'Diya' },
+       { id: 8, name: 'Deepika' },
+       { id: 9, name: 'Jaspreet' },
+       { id: 10, name: 'Harshit' },
+       { id: 11, name: 'Anisha' },
+       { id: 12, name: 'Arshi' },
+       { id: 13, name: 'Shubhi' },
+       { id: 14, name: 'Prateek' },
+       { id: 15, name: 'Vinay' },
+       { id: 16, name: 'Charvi' },
+       { id: 17, name: 'Sandhya' },
+       { id: 18, name: 'Stephy' },
+       { id: 19, name: 'Astha' },
+   ];
+}
+
+$scope.loadCourses = function(){
+  $scope.courses = $scope.courses || [
+    { id: 1, name: 'Motion' },
+    { id: 2, name: 'Work' },
+    { id: 3, name: 'Plant' },
+  ]
+}
 
   //API Variables
-  var BASE_VIEW_COUNT_API = "http://188.166.217.86/app/v1/analytics";
+  var BASE_VIEW_COUNT_API = "http://188.166.217.86/app/v1/analytics/";
 
   $scope.isSidenavOpen = false;
 
@@ -50,71 +87,6 @@ angular.module("home", ['ngMaterial', 'ngMessages']).controller("ViewCountCtrl",
       $http.defaults.headers.common['Content-Type'] = 'application/json';
       $http.defaults.headers.common['x-auth-token'] = $window.sessionStorage.Token;
 
-      //$scope.courses = ['C1' ,'C2' ,'C3' ,'C4' ,'C5', 'C6'];
-        $scope.courseNameFunction = function() {
-
-        //var courseData = response.data.courses;
-        var courseName = ['Motion','Work','Motion','Plant'];
-        //console.log(courseData);
-        for( i = 0; i < courseName.length ; i++){
-
-          courseObjectList[i] = {"Name":courseName[i],
-
-          // "id":courseData[i].id,
-          // "description":courseData[i].description,
-          // "durationType":courseData[i].durationType
-        };
-        console.log("The object is:",courseObjectList);
-        }
-
-        //console.log(courseObjectList);
-
-        $scope.courses = courseObjectList;
-        $scope.searchTerm;
-        $scope.clearSearchTerm = function() {
-          $scope.searchTerm = '';
-        };
-
-      };
-
-      $http.get(BASE_VIEW_COUNT_API+"users?pageNo=1&rpp=500")
-      .then(function(response) {
-        // var userName = ['Amit','Ankit','Akash','Chitra','Charu','Deepti','Diya','Deepika','Jaspreet','Harshit','Sumit'
-        // 'Anisha','Arshi','Shubhi','Prateek','Vinay','Charvi','Sandhya','Stephy','Astha'];
-        //var userData = response.data.users;
-
-        //console.log(userData);
-        for( i = 0; i < userData.length ; i++){
-
-          userObjectList[i] = {"name":userData[i].name,
-          "id":userData[i].id,
-          "username":userData[i].userName,
-          "email":userData[i].email};
-
-         }
-        //console.log(userObjectList);
-        $scope.users = userObjectList;
-        $scope.searchTerm;
-        $scope.clearSearchTerm = function() {
-          $scope.searchTerm = '';
-        };
-
-      });
-
-      $scope.onCourseSelectValueChange = function(item){
-        // for (prop in item){
-        //   console.log(item[prop]);
-        // }
-
-        tempSelectedCourse = item;
-      }
-
-      $scope.onUserSelectValueChange = function(item){
-        // for (prop in item){
-        //   console.log(item[prop]);
-        // }
-        tempSelectedUser = item;
-      }
 
       //////////////////////////////////////////////////////////////////////////////
       //////////////////////////////////////////////////////////////////////////////

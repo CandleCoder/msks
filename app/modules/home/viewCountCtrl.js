@@ -14,6 +14,10 @@ angular.module("home", ['ngMaterial', 'ngMessages']).controller("ViewCountCtrl",
 
   var tempSelectedCourse = [];
   var tempSelectedUser = [];
+  var tempSelectedBoard = [];
+  var tempSelectedGrade = [];
+  var tempSelectedSubject = [];
+
   $scope.user = null;
   $scope.users = null;
 
@@ -124,230 +128,264 @@ $scope.loadGrades = function(){
       $scope.myDate.getDate());
 
       $http.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
-      $http.defaults.headers.common['Content-Type'] = 'application/json';
-      $http.defaults.headers.common['x-auth-token'] = $window.sessionStorage.Token;
+      $http.defaults.headers.common['Content-Type'] = 'application/x-www-form-urlencoded; charset=UTF-8';
+    
+      //$http.defaults.headers.common['x-auth-token'] = $window.sessionStorage.Token;
 
+       $scope.onCourseSelectValueChange = function(item){
+       
 
+        tempSelectedCourse = item;
+        //console.log(tempSelectedCourse);
+      }
+
+      $scope.onBoardSelectValueChange = function(item){
+       
+
+        tempSelectedBoard = item;
+       // console.log(tempSelectedBoard);
+      }
+
+      $scope.onGradeSelectValueChange = function(item){
+       
+
+        tempSelectedGrade = item;
+        //console.log(tempSelectedGrade);
+      }
+
+      $scope.onSubjectSelectValueChange = function(item){
+       
+
+        tempSelectedSubject = item;
+        //console.log(tempSelectedSubject);
+      }
+
+      $scope.onUserSelectValueChange = function(item){
+       
+
+        tempSelectedUser = item;
+        //console.log(tempSelectedUser);
+      }
       //////////////////////////////////////////////////////////////////////////////
       //////////////////////////////////////////////////////////////////////////////
       ///////////////////// *** API CONSUMING METHODS *** //////////////////////////
       //////////////////////////////////////////////////////////////////////////////
       //////////////////////////////////////////////////////////////////////////////
 
-      $scope.showAllCourses = function(api_name){
+      // $scope.showAllCourses = function(api_name){
 
-        var api = BASE_VIEW_COUNT_API+api_name;
+      //   var api = BASE_VIEW_COUNT_API+api_name;
 
-      }
+      // }
 
-      $scope.showCoursesDetailByCourseIdAndUserId = function(courseIds,userIds){
+      // $scope.showCoursesDetailByCourseIdAndUserId = function(courseIds,userIds){
 
-          var api = $scope.getApiByCourseIdAndUserId(courseIds,userIds);
+      //     var api = $scope.getApiByCourseIdAndUserId(courseIds,userIds);
 
-          $http.get(api).success(function(responseCourse, status, headers, config){
-
-
-            //var responseCourse = data;
-            var courseGraphArr = [];
-            // store response data in a variable
-            //responseCourse = data;
-
-            if(responseCourse.ResultData.length >= 0){
-
-            for( i = 0; i < responseCourse.ResultData.length ; i++){
-
-              delete responseCourse.ResultData[i].CourseId;
-
-              var obj = responseCourse.ResultData[i];
-              var course_name = obj.CourseName;
-              var total_time_attempted = obj.UsersAttempt[0].Total_times_attempted;
-              courseGraphArr.push({c: [{v:course_name},{v:total_time_attempted}]});
-            }
-          }
+      //     $http.get(api).success(function(responseCourse, status, headers, config){
 
 
-            //console.log(courseGraphArr);
-            $scope.chartObject = {};
-            $scope.chartObject.type = "ColumnChart";
+      //       //var responseCourse = data;
+      //       var courseGraphArr = [];
+      //       // store response data in a variable
+      //       //responseCourse = data;
 
-            $scope.chartObject.data = {"cols": [
-              {id: "t", label: "Course Name", type: "string"},
-              {id: "s", label: "View Count", type: "number"}
-            ], "rows": courseGraphArr
-          };
+      //       if(responseCourse.ResultData.length >= 0){
 
+      //       for( i = 0; i < responseCourse.ResultData.length ; i++){
 
-          $scope.chartObject.options = {
-            'title': 'Graph',
-            'vAxis': {
-              'title': 'View Count',
-              logScale:true,
-              'gridlines': {
-                'count': 10
-              }
-            },
-            'hAxis': {
-              'title': 'Courses',
+      //         delete responseCourse.ResultData[i].CourseId;
 
-            }
-          }
+      //         var obj = responseCourse.ResultData[i];
+      //         var course_name = obj.CourseName;
+      //         var total_time_attempted = obj.UsersAttempt[0].Total_times_attempted;
+      //         courseGraphArr.push({c: [{v:course_name},{v:total_time_attempted}]});
+      //       }
+      //     }
 
 
-          }).error(function(data, status,$event){
-              $scope.showAlert($event);
-          });
+      //       //console.log(courseGraphArr);
+      //       $scope.chartObject = {};
+      //       $scope.chartObject.type = "ColumnChart";
 
-      }
-
-       $scope.getApiByCourseIdAndUserId = function(courseIds,userIds){
-
-        return BASE_VIEW_COUNT_API+"analytics/viewcount?action=attempted&type=course&id="+courseIds+"&users="+userIds;
-       }
-
-
-       $scope.showCoursesDetailByCourseId = function(courseIds){
-
-        var api = $scope.getApiByCourseIds(courseIds);
-
-        $http.get(api).success(function(data, status, headers, config){
-
-            var responseCourse;
-            var courseGraphArr = [];
-            // store response data in a variable
-            responseCourse = data;
-            if(responseCourse.ResultData.length >0){
-             // console.log("No data found");
-            for( i = 0; i < responseCourse.ResultData.length ; i++){
-
-              delete responseCourse.ResultData[i].CourseId;
-              var obj = responseCourse.ResultData[i];
-              var course_name = obj.CourseName;
-              var total_time_attempted = obj.Total_times_attempted;
-              courseGraphArr.push({c: [{v: course_name},{v: total_time_attempted}]});
-            }
-          }
+      //       $scope.chartObject.data = {"cols": [
+      //         {id: "t", label: "Course Name", type: "string"},
+      //         {id: "s", label: "View Count", type: "number"}
+      //       ], "rows": courseGraphArr
+      //     };
 
 
-            //console.log(courseGraphArr);
-            $scope.chartObject = {};
-            $scope.chartObject.type = "ColumnChart";
+      //     $scope.chartObject.options = {
+      //       'title': 'Graph',
+      //       'vAxis': {
+      //         'title': 'View Count',
+      //         logScale:true,
+      //         'gridlines': {
+      //           'count': 10
+      //         }
+      //       },
+      //       'hAxis': {
+      //         'title': 'Courses',
 
-            $scope.chartObject.data = {"cols": [
-              {id: "t", label: "Course Name", type: "string"},
-              {id: "s", label: "View Count", type: "number"}
-            ], "rows": courseGraphArr
-          };
-
-
-          $scope.chartObject.options = {
-            'title': 'Graph',
-            'vAxis': {
-              'title': 'View Count',
-              logScale:true,
-              'gridlines': {
-                'count': 10
-              }
-            },
-            'hAxis': {
-              'title': 'Courses',
-
-            }
-          }
+      //       }
+      //     }
 
 
-          }).error(function(data, status,$event){
-              $scope.showAlert($event);
-          });
-       }
+      //     }).error(function(data, status,$event){
+      //         $scope.showAlert($event);
+      //     });
 
-          $scope.showAlert = function(ev) {
-              var defaults = {
-              title: 'Confirm',
-              content: '',
-              event: null
-         };
+      // }
 
-      var opts = angular.merge({}, defaults);
-        $mdDialog.show(
-          $mdDialog.alert()
-            .parent(angular.element(document.querySelector('#popupContainer')))
-            .clickOutsideToClose(true)
+       // $scope.getApiByCourseIdAndUserId = function(courseIds,userIds){
 
-            .textContent('No user data available')
-            .ariaLabel('Alert Dialog Demo')
-            .ok('Dismiss')
-            .targetEvent(opts.event)
-        );
-      };
-
-       $scope.getApiByCourseIds = function(courseIds){
-
-        return BASE_VIEW_COUNT_API+"analytics/viewcount?action=attempted&type=course&id="+courseIds;
-       }
-
-       $scope.showCoursesDetailByUserId = function(userIds){
-
-        var api = $scope.getApiByUserIds(userIds);
-
-        $http.get(api).success(function(responseCourse, status, headers, config){
-
-           // var responseCourse;
-            var courseGraphArr = [];
-            // store response data in a variable
-            //responseCourse = data;
-            if(responseCourse.ResultData.length >0){
-             // console.log("No data found");
-            for( i = 0; i < responseCourse.ResultData.length ; i++){
-
-              delete responseCourse.ResultData[i].CourseId;
-              var obj = responseCourse.ResultData[i];
-
-              //console.log("obj is :",obj.UsersAttempt[0],i);
-              var course_name = obj.CourseName;
-              //console.log("name is :", course_name);
-              var total_time_attempted = obj.UsersAttempt[0].Total_times_attempted;
-              //console.log("attempts",total_time_attempted);
-              courseGraphArr.push({c: [{v: course_name},{v: total_time_attempted}]});
-            }
-          }
+       //  return BASE_VIEW_COUNT_API+"analytics/viewcount?action=attempted&type=course&id="+courseIds+"&users="+userIds;
+       // }
 
 
-            //console.log(courseGraphArr);
-            $scope.chartObject = {};
-            $scope.chartObject.type = "ColumnChart";
+       // $scope.showCoursesDetailByCourseId = function(courseIds){
 
-            $scope.chartObject.data = {"cols": [
-              {id: "t", label: "Course Name", type: "string"},
-              {id: "s", label: "View Count", type: "number"}
-            ], "rows": courseGraphArr
-          };
+       //  var api = $scope.getApiByCourseIds(courseIds);
 
+       //  $http.get(api).success(function(data, status, headers, config){
 
-          $scope.chartObject.options = {
-            'title': 'Graph',
-            'vAxis': {
-              'title': 'View Count',
-              logScale:true,
-              'gridlines': {
-                'count': 10
-              }
-            },
-            'hAxis': {
-              'title': 'Courses',
+       //      var responseCourse;
+       //      var courseGraphArr = [];
+       //      // store response data in a variable
+       //      responseCourse = data;
+       //      if(responseCourse.ResultData.length >0){
+       //       // console.log("No data found");
+       //      for( i = 0; i < responseCourse.ResultData.length ; i++){
 
-            }
-          }
+       //        delete responseCourse.ResultData[i].CourseId;
+       //        var obj = responseCourse.ResultData[i];
+       //        var course_name = obj.CourseName;
+       //        var total_time_attempted = obj.Total_times_attempted;
+       //        courseGraphArr.push({c: [{v: course_name},{v: total_time_attempted}]});
+       //      }
+       //    }
 
 
-          }).error(function(data, status,$event){
-              $scope.showAlert($event);
-          });
-       }
+       //      //console.log(courseGraphArr);
+       //      $scope.chartObject = {};
+       //      $scope.chartObject.type = "ColumnChart";
 
-       $scope.getApiByUserIds = function(userIds){
+       //      $scope.chartObject.data = {"cols": [
+       //        {id: "t", label: "Course Name", type: "string"},
+       //        {id: "s", label: "View Count", type: "number"}
+       //      ], "rows": courseGraphArr
+       //    };
 
-        return BASE_VIEW_COUNT_API+"analytics/viewcount?action=attempted&type=course&users="+userIds;
-       }
+
+       //    $scope.chartObject.options = {
+       //      'title': 'Graph',
+       //      'vAxis': {
+       //        'title': 'View Count',
+       //        logScale:true,
+       //        'gridlines': {
+       //          'count': 10
+       //        }
+       //      },
+       //      'hAxis': {
+       //        'title': 'Courses',
+
+       //      }
+       //    }
+
+
+       //    }).error(function(data, status,$event){
+       //        $scope.showAlert($event);
+       //    });
+       // }
+
+         //  $scope.showAlert = function(ev) {
+         //      var defaults = {
+         //      title: 'Confirm',
+         //      content: '',
+         //      event: null
+         // };
+
+      // var opts = angular.merge({}, defaults);
+      //   $mdDialog.show(
+      //     $mdDialog.alert()
+      //       .parent(angular.element(document.querySelector('#popupContainer')))
+      //       .clickOutsideToClose(true)
+
+      //       .textContent('No user data available')
+      //       .ariaLabel('Alert Dialog Demo')
+      //       .ok('Dismiss')
+      //       .targetEvent(opts.event)
+      //   );
+      // };
+
+       // $scope.getApiByCourseIds = function(courseIds){
+
+       //  return BASE_VIEW_COUNT_API+"analytics/viewcount?action=attempted&type=course&id="+courseIds;
+       // }
+
+       // $scope.showCoursesDetailByUserId = function(userIds){
+
+       //  var api = $scope.getApiByUserIds(userIds);
+
+       //  $http.get(api).success(function(responseCourse, status, headers, config){
+
+       //     // var responseCourse;
+       //      var courseGraphArr = [];
+       //      // store response data in a variable
+       //      //responseCourse = data;
+       //      if(responseCourse.ResultData.length >0){
+       //       // console.log("No data found");
+       //      for( i = 0; i < responseCourse.ResultData.length ; i++){
+
+       //        delete responseCourse.ResultData[i].CourseId;
+       //        var obj = responseCourse.ResultData[i];
+
+       //        //console.log("obj is :",obj.UsersAttempt[0],i);
+       //        var course_name = obj.CourseName;
+       //        //console.log("name is :", course_name);
+       //        var total_time_attempted = obj.UsersAttempt[0].Total_times_attempted;
+       //        //console.log("attempts",total_time_attempted);
+       //        courseGraphArr.push({c: [{v: course_name},{v: total_time_attempted}]});
+       //      }
+       //    }
+
+
+       //      //console.log(courseGraphArr);
+       //      $scope.chartObject = {};
+       //      $scope.chartObject.type = "ColumnChart";
+
+       //      $scope.chartObject.data = {"cols": [
+       //        {id: "t", label: "Course Name", type: "string"},
+       //        {id: "s", label: "View Count", type: "number"}
+       //      ], "rows": courseGraphArr
+       //    };
+
+
+       //    $scope.chartObject.options = {
+       //      'title': 'Graph',
+       //      'vAxis': {
+       //        'title': 'View Count',
+       //        logScale:true,
+       //        'gridlines': {
+       //          'count': 10
+       //        }
+       //      },
+       //      'hAxis': {
+       //        'title': 'Courses',
+
+       //      }
+       //    }
+
+
+       //    }).error(function(data, status,$event){
+       //        $scope.showAlert($event);
+       //    });
+       // }
+
+       // $scope.getApiByUserIds = function(userIds){
+
+       //  return BASE_VIEW_COUNT_API+"analytics/viewcount?action=attempted&type=course&users="+userIds;
+       // }
 
       //////////////////////////////////////////////////////////////////////////////
       //////////////////////////////////////////////////////////////////////////////
@@ -359,63 +397,96 @@ $scope.loadGrades = function(){
 
 
       $scope.submit = function(){
-        var courseIdArr = [];
-        var userIdArr = [];
+         var courseIdArr = [];
+         var userIdArr = [];
+         var gradeArr = [];
+         var subjectArr = [];
+         var boardArr = [];
 
-        for( i = 0; i < tempSelectedCourse.length ; i++){
+         for( i = 0; i < tempSelectedCourse.length ; i++){
 
-          courseIdArr.push(tempSelectedCourse[i].id);
+           courseIdArr.push(tempSelectedCourse[i].name);
 
-        }
-
-        for( j = 0; j < tempSelectedUser.length ; j++){
-
-          userIdArr.push(tempSelectedUser[j].id);
-        }
-
-        if(courseIdArr.length > 0 && userIdArr.length == 0 ){
-
-          $scope.showCoursesDetailByCourseId(courseIdArr);
-
-        }
-
-        else if(courseIdArr.length > 0 && userIdArr.length > 0){
-
-         $scope.showCoursesDetailByCourseIdAndUserId(courseIdArr,userIdArr);
+           console.log(courseIdArr);
 
          }
 
+         for( j = 0; j < tempSelectedUser.length ; j++){
+
+           userIdArr.push(tempSelectedUser[j].name);
+
+           console.log(userIdArr);
+
+         }
+
+         for( k = 0; k < tempSelectedGrade.length ; k++){
+
+           gradeArr.push(tempSelectedGrade[k].name);
+
+           console.log(gradeArr);
+
+         }
+
+         for( l = 0; l < tempSelectedSubject.length ; l++){
+
+           subjectArr.push(tempSelectedSubject[l].name);
+
+          
+
+         }
+
+         for( m = 0; m < tempSelectedBoard.length ; m++){
+
+          boardArr.push(tempSelectedBoard[m].name);
+
+          console.log(boardArr);
+         }
+
+         // if(courseIdArr.length > 0 && userIdArr.length == 0 ){
+
+         //   $scope.showCoursesDetailByCourseId(courseIdArr);
+
+         // }
+
+      //   else if(courseIdArr.length > 0 && userIdArr.length > 0){
+
+      //    $scope.showCoursesDetailByCourseIdAndUserId(courseIdArr,userIdArr);
+
+      //    }
 
 
-       else if(userIdArr){
 
-        $scope.showCoursesDetailByUserId(userIdArr);
+      //  else if(userIdArr){
 
-      }}
+      //   $scope.showCoursesDetailByUserId(userIdArr);
+
+      // }
+
+    }
       // The md-select directive eats keydown events for some quick select
       // logic. Since we have a search input here, we don't need that logic.
-      $element.find('input').on('keydown', function(ev) {
-        ev.stopPropagation();
-      });
+      // $element.find('input').on('keydown', function(ev) {
+      //   ev.stopPropagation();
+      // });
 
 
 
       // The md-select directive eats keydown events for some quick select
       // logic. Since we have a search input here, we don't need that logic.
-      $element.find('input').on('keydown', function(ev) {
-        ev.stopPropagation();
-      });
+      // $element.find('input').on('keydown', function(ev) {
+      //   ev.stopPropagation();
+      // });
       $scope.DashboardName="Dashboard";
       $scope.ViewCountName = "View Count";
       $scope.TimeSpentName = "Last Visited"
 
 
-     //  $http.get("http://10.11.9.8/api/v1/analytics/viewcount?action=attempted&type=course")
-     //  .then(function(response) {
+      $http.get("http://188.166.217.86/app/v1/analytics/viewcount?ids=Private_Equity,Motion&action=viewcount&type=lesson&board=cbse&grade=10&subject=Economics")
+      .then(function(response) {
 
-     //    // store response data in a variable
-     //    responsejson = response.data;
-
+        // store response data in a variable
+        responsejson = response.data;
+        console.log(responsejson);
      //    for( i = 0; i < responsejson.ResultData.length ; i++){
      //      delete responsejson.ResultData[i].CourseId;
      //      graphInnerArr.push({v: responsejson.ResultData[i].CourseName});
@@ -452,5 +523,5 @@ $scope.loadGrades = function(){
      //    }
      //  };
 
-     // });
+      });
   });

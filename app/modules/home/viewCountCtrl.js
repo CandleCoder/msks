@@ -1,4 +1,8 @@
-angular.module("home", ['ngMaterial', 'ngMessages']).controller("ViewCountCtrl", function ($scope,$http,$window,$element,$mdDialog, $mdMedia,$mdSidenav) {
+angular.module("home", ['ngMaterial', 'ngMessages'])
+.config(function($httpProvider){
+    delete $httpProvider.defaults.headers.common['X-Requested-With'];
+})
+.controller("ViewCountCtrl", function ($scope,$http,$window,$element,$mdDialog, $mdMedia,$mdSidenav) {
 
   // if($http.defaults.headers.common['x-auth-token'] == 'null'){
   //   $window.location.href = '/#/login';
@@ -69,7 +73,7 @@ $scope.loadSubjects = function(){
   $scope.subjects = $scope.subjects || [
     { id: 1, name: 'Economics' },
     { id: 2, name: 'Science' },
-    
+
   ]
 }
 
@@ -127,41 +131,41 @@ $scope.loadGrades = function(){
       $scope.myDate.getMonth() + 2,
       $scope.myDate.getDate());
 
-      $http.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
+      //$http.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
       $http.defaults.headers.common['Content-Type'] = 'application/x-www-form-urlencoded; charset=UTF-8';
-    
+
       //$http.defaults.headers.common['x-auth-token'] = $window.sessionStorage.Token;
 
        $scope.onCourseSelectValueChange = function(item){
-       
+
 
         tempSelectedCourse = item;
         //console.log(tempSelectedCourse);
       }
 
       $scope.onBoardSelectValueChange = function(item){
-       
+
 
         tempSelectedBoard = item;
        // console.log(tempSelectedBoard);
       }
 
       $scope.onGradeSelectValueChange = function(item){
-       
+
 
         tempSelectedGrade = item;
         //console.log(tempSelectedGrade);
       }
 
       $scope.onSubjectSelectValueChange = function(item){
-       
+
 
         tempSelectedSubject = item;
         //console.log(tempSelectedSubject);
       }
 
       $scope.onUserSelectValueChange = function(item){
-       
+
 
         tempSelectedUser = item;
         //console.log(tempSelectedUser);
@@ -431,7 +435,7 @@ $scope.loadGrades = function(){
 
            subjectArr.push(tempSelectedSubject[l].name);
 
-          
+
 
          }
 
@@ -479,14 +483,21 @@ $scope.loadGrades = function(){
       $scope.DashboardName="Dashboard";
       $scope.ViewCountName = "View Count";
       $scope.TimeSpentName = "Last Visited"
+      $.get("http://188.166.217.86/app/v1/analytics/viewcount?ids=Private_Equity,Motion&action=viewcount&type=lesson&board=cbse&grade=10&subject=Economics",function(data,status){
+       console.log(data.userattempts.ResultData[0]);
+       var responseData = data.userattempts.ResultData[0];
+       console.log(responseData.Total_times_attempted);
+      })
 
+      //$http.get("http://188.166.217.86/app/v1/analytics/viewcount?ids=Private_Equity,Motion&action=viewcount&type=lesson&board=cbse&grade=10&subject=Economics")
+      //.then(function(response,error) {
 
-      $http.get("http://188.166.217.86/app/v1/analytics/viewcount?ids=Private_Equity,Motion&action=viewcount&type=lesson&board=cbse&grade=10&subject=Economics")
-      .then(function(response) {
-
+      //  if(error){
+      //    console.log(error);
+      //  }
         // store response data in a variable
-        responsejson = response.data;
-        console.log(responsejson);
+      //  responsejson = response.data;
+      //  console.log(responsejson);
      //    for( i = 0; i < responsejson.ResultData.length ; i++){
      //      delete responsejson.ResultData[i].CourseId;
      //      graphInnerArr.push({v: responsejson.ResultData[i].CourseName});
@@ -523,5 +534,5 @@ $scope.loadGrades = function(){
      //    }
      //  };
 
-      });
+    //  });
   });

@@ -120,7 +120,7 @@ $scope.loadGrades = function(){
 
    var responsejson = data.userattempts;
    lessonViewCount = responsejson.ResultData[0].Total_times_attempted;
-   console.log(" lessonViewCount ",lessonViewCount);
+   //console.log(" lessonViewCount ",lessonViewCount);
    var graphMainArr = [];
    var graphInnerArr = [];
       for( i = 0; i < responsejson.ResultData.length ; i++){
@@ -152,9 +152,13 @@ $scope.loadGrades = function(){
        'title': 'Lesson Name',
     }
    };
-  });
+ }).then(
+   function() {
+      //alert( "$.get succeeded" );
+      topicRequest();
+    } );
 
-
+ function topicRequest(){
   $.get(BASE_VIEW_COUNT_API+"viewcount?ids=What_is_Private_Equity&action=viewcount&type=topic&board=cbse&grade=10&subject=Economics&lessonid=Private_Equity",function(data,status){
 
    var responsejson = data.userattempts;
@@ -171,7 +175,7 @@ $scope.loadGrades = function(){
      $scope.chartObject1 = {};
      $scope.chartObject1.type = "ColumnChart";
 
-     console.log(" topicViewCount ",topicViewCount);
+     //console.log(" topicViewCount ",topicViewCount);
 
      $scope.chartObject1.data = {"cols": [
        {id: "t", label: "Lesson Name", type: "string"},
@@ -192,9 +196,14 @@ $scope.loadGrades = function(){
      }
    };
   }
-);
+).then(
+  function() {
+   //alert( "$.get succeeded" );
+   subTopicRequest();
+ }
+);}
 
-
+   function subTopicRequest(){
    $.get(BASE_VIEW_COUNT_API+"viewcount?ids=Perspectives_of_Limited_and_General_Partners,Industry_Review&action=viewcount&type=subtopic&board=cbse&grade=10&subject=Economics&lessonid=Private_Equity&topicid=What_is_Private_Equity",function(data,status){
    var responsejson = data.userattempts;
    var graphMainArr = [];
@@ -210,14 +219,14 @@ $scope.loadGrades = function(){
       }
      $scope.chartObject2 = {};
      $scope.chartObject2.type = "ColumnChart";
-     console.log(" subTopicViewCount ",subTopicViewCount);
+     //console.log(" subTopicViewCount ",subTopicViewCount);
 
      $scope.chartObject2.data = {"cols": [
        {id: "t", label: "Lesson Name", type: "string"},
        {id: "s", label: "Total Times Attempted", type: "number"}
      ], "rows": graphMainArr
    };
-   $scope.$apply();
+  
 
    $scope.chartObject2.options = {
      'title': 'Graph',
@@ -231,10 +240,10 @@ $scope.loadGrades = function(){
    };
 
    $scope.totalViewCount = lessonViewCount+topicViewCount+subTopicViewCount;
-   console.log(lessonViewCount,topicViewCount,subTopicViewCount,$scope.totalViewCount);
+   //console.log(lessonViewCount,topicViewCount,subTopicViewCount,$scope.totalViewCount);
    $scope.$apply();
   }
-);
+);}
 
     $scope.DashboardName="Dashboard";
     $scope.ViewCountName = "View Count";

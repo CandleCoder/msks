@@ -2,7 +2,7 @@ angular.module("home", ['ngMaterial', 'ngMessages'])
 .controller("ViewCountCtrl", function ($scope,$http,$window,$element,$mdDialog, $mdMedia,$mdSidenav) {
 
   // store response data in a variable
-  
+
   // var graphMainArr=[];
   // var graphInnerArr=[];
   var courseObjectList = [];
@@ -12,10 +12,11 @@ angular.module("home", ['ngMaterial', 'ngMessages'])
   var tempSelectedBoard = [];
   var tempSelectedGrade = [];
   var tempSelectedSubject = [];
-  var ankush;
-  var marksharks;
+  var lessonViewCount =0;
+  var topicViewCount=0;
+  var subTopicViewCount=0;
 
-  
+  $scope.totalViewCount= null;
   $scope.user = null;
   $scope.users = null;
 
@@ -118,9 +119,10 @@ $scope.loadGrades = function(){
   $.get(BASE_VIEW_COUNT_API+ "viewcount?ids=Private_Equity,Motion&action=viewcount&type=lesson&board=cbse&grade=10&subject=Economics",function(data,status){
 
    var responsejson = data.userattempts;
+   lessonViewCount = responsejson.ResultData[0].Total_times_attempted;
+   console.log(" lessonViewCount ",lessonViewCount);
    var graphMainArr = [];
    var graphInnerArr = [];
-
       for( i = 0; i < responsejson.ResultData.length ; i++){
         delete responsejson.ResultData[i].Id;
         graphInnerArr.push({v: responsejson.ResultData[i].Name});
@@ -142,17 +144,13 @@ $scope.loadGrades = function(){
 
    $scope.chartObject.options = {
      'title': 'Graph',
+     'bar': {groupWidth: "30%"},
      'vAxis': {
        'title': 'Total Times Attempted',
-       logScale:true,
-       'gridlines': {
-         'count': 10
-       }
      },
      'hAxis': {
        'title': 'Lesson Name',
-
-     }
+    }
    };
   });
 
@@ -160,20 +158,20 @@ $scope.loadGrades = function(){
   $.get(BASE_VIEW_COUNT_API+"viewcount?ids=What_is_Private_Equity&action=viewcount&type=topic&board=cbse&grade=10&subject=Economics&lessonid=Private_Equity",function(data,status){
 
    var responsejson = data.userattempts;
-    var graphMainArr = [];
+   var graphMainArr = [];
    var graphInnerArr = [];
-
       for( i = 0; i < responsejson.ResultData.length ; i++){
         delete responsejson.ResultData[i].Id;
         graphInnerArr.push({v: responsejson.ResultData[i].Name});
         graphInnerArr.push({v: responsejson.ResultData[i].Total_times_attempted});
-
+        topicViewCount += responsejson.ResultData[i].Total_times_attempted;
         graphMainArr.push({c: graphInnerArr});
         graphInnerArr=[];
       }
-
      $scope.chartObject1 = {};
      $scope.chartObject1.type = "ColumnChart";
+
+     console.log(" topicViewCount ",topicViewCount);
 
      $scope.chartObject1.data = {"cols": [
        {id: "t", label: "Lesson Name", type: "string"},
@@ -184,38 +182,35 @@ $scope.loadGrades = function(){
 
    $scope.chartObject1.options = {
      'title': 'Graph',
+     'bar': {groupWidth: "30%"},
      'vAxis': {
        'title': 'Total Times Attempted',
-       logScale:true,
-       'gridlines': {
-         'count': 10
-       }
      },
      'hAxis': {
-       'title': 'Lesson Name',
+       'title': 'Topic Name',
 
      }
    };
-  });
+  }
+);
 
-  
+
    $.get(BASE_VIEW_COUNT_API+"viewcount?ids=Perspectives_of_Limited_and_General_Partners,Industry_Review&action=viewcount&type=subtopic&board=cbse&grade=10&subject=Economics&lessonid=Private_Equity&topicid=What_is_Private_Equity",function(data,status){
-
    var responsejson = data.userattempts;
-    var graphMainArr = [];
+   var graphMainArr = [];
    var graphInnerArr = [];
 
       for( i = 0; i < responsejson.ResultData.length ; i++){
         delete responsejson.ResultData[i].Id;
         graphInnerArr.push({v: responsejson.ResultData[i].Name});
         graphInnerArr.push({v: responsejson.ResultData[i].Total_times_attempted});
-
+        subTopicViewCount += responsejson.ResultData[i].Total_times_attempted;
         graphMainArr.push({c: graphInnerArr});
         graphInnerArr=[];
       }
-
      $scope.chartObject2 = {};
      $scope.chartObject2.type = "ColumnChart";
+     console.log(" subTopicViewCount ",subTopicViewCount);
 
      $scope.chartObject2.data = {"cols": [
        {id: "t", label: "Lesson Name", type: "string"},
@@ -226,19 +221,20 @@ $scope.loadGrades = function(){
 
    $scope.chartObject2.options = {
      'title': 'Graph',
+      'bar': {groupWidth: "30%"},
      'vAxis': {
        'title': 'Total Times Attempted',
-       logScale:true,
-       'gridlines': {
-         'count': 10
-       }
      },
      'hAxis': {
-       'title': 'Lesson Name',
-
+       'title': 'Sub-topic Name',
      }
    };
-  });
+
+   $scope.totalViewCount = lessonViewCount+topicViewCount+subTopicViewCount;
+   console.log(lessonViewCount,topicViewCount,subTopicViewCount,$scope.totalViewCount);
+   $scope.$apply();
+  }
+);
 
     $scope.DashboardName="Dashboard";
     $scope.ViewCountName = "View Count";
@@ -249,14 +245,14 @@ $scope.loadGrades = function(){
     $scope.myDate.getMonth() - 2,
     $scope.myDate.getDate());
     $scope.maxDate = new Date(
-      $scope.myDate.getFullYear(),
-      $scope.myDate.getMonth() + 2,
-      $scope.myDate.getDate());
+    $scope.myDate.getFullYear(),
+    $scope.myDate.getMonth() + 2,
+    $scope.myDate.getDate());
 
 
-       $scope.onCourseSelectValueChange = function(item){
-              tempSelectedCourse = item;
-              }
+      $scope.onCourseSelectValueChange = function(item){
+       tempSelectedCourse = item;
+      }
 
       $scope.onBoardSelectValueChange = function(item){
         tempSelectedBoard = item;
@@ -320,4 +316,5 @@ $scope.loadGrades = function(){
           console.log(boardArr);
          }
     }
+
   });
